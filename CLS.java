@@ -6,8 +6,8 @@ public class CLS{
 	public String super_class;
 		
 	public CLS(Ident n, Ident s){
-		name = n.name;
-		super_class = s.name;
+		this.name = n.name;
+		this.super_class = s.name;
 	}
 	
 }

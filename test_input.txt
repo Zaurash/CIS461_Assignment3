@@ -1,4 +1,4 @@
-class JustTheTop( x: Int ) extends Obj
+class JustTheTop( x: Int ) extends String
 	{
 	def STR() : String {
 			if 2 == 3 {

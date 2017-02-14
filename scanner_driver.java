@@ -13,7 +13,6 @@ public class scanner_driver {
 	  for(int i = 0; i < result.class_list.size(); i++){
 		  System.out.println("Class name " + result.class_list.get(i).name);
 		  System.out.println("Super class " + result.class_list.get(i).super_class);
-		  
 	  }
 	  System.out.println("Parsing completed with no errors");     
     } catch (Exception e) {
