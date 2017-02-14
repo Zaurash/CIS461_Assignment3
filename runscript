@@ -1,2 +1,0 @@
-#1 /bin/bash
-java -cp .:./Users/Zauran/Documents/CIS461/Assignments/Assignment3:./lib/java-cup-11b.jar scanner_driver test_input.txt

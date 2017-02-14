@@ -1,12 +1,2 @@
-#! /bin/bash
-#
-#  Run the scanner as a java program
-#
-locality=`pwd`
-cat >runscript <<EOF
 #1 /bin/bash
-java -cp .:.${locality}:./lib/java-cup-11b.jar scanner_driver $1
-EOF
-chmod a+x runscript
-
-./runscript
+java -cp .:./Users/Zauran/Documents/CIS461/Assignments/Assignment3:./lib/java-cup-11b.jar scanner_driver $1
