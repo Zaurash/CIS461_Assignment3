@@ -1,4 +1,4 @@
-/* init with / scan with? */
+/* should -30 be MINUS special_rexpr instead of MINUS expr? */
 /* Should == be different from = */
 
 import java_cup.runtime.*;
@@ -53,8 +53,9 @@ terminal Integer 	INT;
 terminal String 	STRING, IDENT;
 
 non terminal 			Program, Statement, Class, Class_Signature, Class_Body, Statement_Block;
-non terminal 			Formals, Formals_nonEmpty, Formal_Arg, Methods, Method, Actual_Args, L_Expr, R_Expr, Args_nonEmpty;
+non terminal 			Formals, Formals_nonEmpty, Formal_Arg, Methods, Method, Actual_Args, Args_nonEmpty;
 non terminal 			Return_Statement, Elif_Statement, Elif_Statements, Else_Statement;
+non terminal Expr		R_Expr, L_Expr;
 non terminal Ident		OptExtends;
 non terminal LinkedList Classes, Statements;
 
@@ -64,25 +65,25 @@ precedence left EQUALS, ATMOST, ATLEAST, LESS, MORE, AND, OR, NOT;
 precedence left DOT;
 
 
-   Program 			::= Classes:c Statements:s {: RESULT = new Node(c,s); :}
+   Program 			::= Classes:c Statements:s {: RESULT = new Program(c,s); :}
    					;
 					
    Statements		::= Statements:sts Statement:st {: sts.add(st); RESULT = sts; :}
-   					|	{: RESULT = new LinkedList<Stmt>(); :}
+   					|								{: RESULT = new LinkedList<Stmt>(); :}
 					;
    
-   Classes			::= Classes:cs Class:c {: cs.add(c); RESULT = cs; :}
-   					|	{: RESULT = new LinkedList<CLS>(); :}
+   Classes			::= Classes:cs Class:c 	{: cs.add(c); RESULT = cs; :}
+   					|						{: RESULT = new LinkedList<CLS>(); :}
 					;
    
-   Class   			::= Class_Signature:sig Class_Body {: RESULT = sig; :}
+   Class   			::= Class_Signature:sig Class_Body 	{: RESULT = sig; :}
    					;
    
-   Class_Signature  ::= CLASS IDENT:i LPAREN Formals RPAREN OptExtends:oe {: Ident temp = new Ident(i); System.out.println("Class Sig Ident " + temp.name + " super class " + oe.name); RESULT = new CLS(temp, oe); :}
+   Class_Signature  ::= CLASS IDENT:i LPAREN Formals RPAREN OptExtends:oe 	{: RESULT = new CLS(new Ident(i), oe); :}
    					;
 					
-   OptExtends		::= EXTENDS IDENT:i {: RESULT = new Ident(i); :}
-   					|	{: Ident temp = new Ident("Obj"); RESULT = temp; System.out.println("Empty OptExtends " + temp.name); :}
+   OptExtends		::= EXTENDS IDENT:i 	{: RESULT = new Ident(i); :}
+   					|						{: Ident temp = new Ident("Obj"); RESULT = temp; System.out.println("Empty OptExtends " + temp.name); :}
 					;
 					
    Class_Body		::= LBRACKET Statements Methods RBRACKET
@@ -96,6 +97,7 @@ precedence left DOT;
 					|	Return_Statement
 					|	L_Expr COLON IDENT EQUALS R_Expr SEMICOLON
 					|	L_Expr EQUALS R_Expr SEMICOLON
+					|	R_Expr:r SEMICOLON											/* {: RESULT = new Stmt(r); :}		*/	
 					;
 					
    Elif_Statements	::= Elif_Statements Elif_Statement
@@ -143,14 +145,14 @@ precedence left DOT;
 					| 	R_Expr DOT IDENT
 					;
 	
-	R_Expr			::= STRING
-					|	INT
-					| 	L_Expr
-					|	R_Expr PLUS R_Expr
-					|	R_Expr MINUS R_Expr
-					|	R_Expr TIMES R_Expr
-					|	R_Expr DIVIDE R_Expr
-					|	MINUS R_Expr
+	R_Expr			::= STRING:s 										{: RESULT = Expr.stringconst(s); :}
+					|	INT:i											{: RESULT = Expr.intconst(i); :}
+					| 	L_Expr:l										{: RESULT = l; :}
+					|	R_Expr:r1 PLUS R_Expr:r2						{: RESULT = Expr.binop("PLUS", r1, r2); :}
+					|	R_Expr:r1 MINUS R_Expr:r2						{: RESULT = Expr.binop("MINUS", r1, r2); :}
+					|	R_Expr:r1 TIMES R_Expr:r2						{: RESULT = Expr.binop("TIMES", r1, r2); :}			
+					|	R_Expr:r1 DIVIDE R_Expr:r2						{: RESULT = Expr.binop("DIVIDE", r1, r2); :}
+					|	MINUS INT:i										{: int temp = i * -1; RESULT = Expr.intconst(temp); :}
 					|	LPAREN R_Expr RPAREN
 					|	R_Expr EQUALS R_Expr
 					| 	R_Expr ATMOST R_Expr
@@ -161,7 +163,7 @@ precedence left DOT;
 					| 	R_Expr OR R_Expr
 					| 	R_Expr NOT R_Expr
 					|	R_Expr DOT IDENT LPAREN Actual_Args RPAREN
-					|	IDENT LPAREN Actual_Args RPAREN
+					|	IDENT:i LPAREN Actual_Args:a RPAREN					{: RESULT = Expr.construct(new Ident(i)); :}
 					;
 					
 

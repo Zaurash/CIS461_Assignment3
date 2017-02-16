@@ -1,4 +1,4 @@
-class JustTheTop( x: Int ) extends String
+class JustTheTop( x: Int ) extends Another
 	{
 	def STR() : String {
 			if 2 == 3 {
@@ -13,7 +13,7 @@ class JustTheTop( x: Int ) extends String
 		 }
 	}
 
-class Another( y: Obj ) 
+class Another( y: Obj )
 	{	def STR() : String {
 		 }
 		 
@@ -21,8 +21,11 @@ class Another( y: Obj )
 	return Pt(this.x + other.x, this.y + other.y);
 	}
 		 }
+		 
 
-foo.y = 5;
+foo.y = -5;
+
+Another(y);
 
 if x=y {
 this.x = x;

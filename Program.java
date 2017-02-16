@@ -6,8 +6,8 @@ public class Program{
 	public LinkedList<Stmt> statement_list;
 	
 	public Program(LinkedList<CLS> c, LinkedList<Stmt> s){
-		class_list = c;
-		statement_list = s;
+		this.class_list = c;
+		this.statement_list = s;
 	}
 	
 }
