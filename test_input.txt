@@ -24,6 +24,7 @@ class Another( y: Obj )
 		 
 
 foo.y = -5;
+3<5;
 
 Another(y);
 

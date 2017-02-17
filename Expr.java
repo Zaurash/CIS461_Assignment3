@@ -2,8 +2,14 @@ import java.util.*;
 
 public class Expr{
 	
+	String constructor_name;
+	
 	public Expr(){
 
+	}
+	
+	public Expr(String n, LinkedList<Expr> l){
+		this.constructor_name = n;
 	}
 	
 	// Conversion from expr to int

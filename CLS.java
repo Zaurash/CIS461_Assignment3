@@ -5,15 +5,15 @@ public class CLS{
 	public String name;
 	public String super_class;
 		
-	public CLS(Ident n, Ident s){
-		this.name = n.name;
-		this.super_class = s.name;
+	public CLS(String n, String s){
+		this.name = n;
+		this.super_class = s;
 	}
 		
-		public static Boolean check_super(Program res, LinkedList lis, String s){
+		public static Boolean check_super(Program res, String s){
 	  	  for(int inc = 0; inc < res.class_list.size(); inc++){
 	  		  String temp = res.class_list.get(inc).name;
-	  				  if(s == temp){
+	  				  if(s.equals(temp)){
 					return true;	  				  	
 	  		  }
 	  	  }

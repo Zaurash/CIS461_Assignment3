@@ -1,5 +1,5 @@
 /* should -30 be MINUS special_rexpr instead of MINUS expr? */
-/* Should == be different from = */
+/* none vs nothing */
 
 import java_cup.runtime.*;
 import java.util.*;
@@ -46,7 +46,7 @@ parser code {:
 terminal			CLASS, DEF, EXTENDS, IF, ELIF, ELSE, WHILE, RETURN;
 terminal			AND, OR, NOT, none;
 terminal			PLUS, MINUS, TIMES, DIVIDE;
-terminal			EQUALS, ATMOST, LESS, ATLEAST, MORE;
+terminal			EQUALS, ATMOST, LESS, ATLEAST, MORE, EQUIV;
 terminal			LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET;
 terminal			COMMA, SEMICOLON, DOT, COLON;
 terminal Integer 	INT;
@@ -61,11 +61,11 @@ non terminal LinkedList Classes, Statements;
 
 precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
-precedence left EQUALS, ATMOST, ATLEAST, LESS, MORE, AND, OR, NOT;
+precedence left EQUALS, EQUIV, ATMOST, ATLEAST, LESS, MORE, AND, OR, NOT;
 precedence left DOT;
 
 
-   Program 			::= Classes:c Statements:s {: RESULT = new Program(c,s); :}
+   Program 			::= Classes:c Statements:s {: c.add(new CLS("Obj", "Obj")); c.add(new CLS("String", "Obj")); c.add(new CLS("Nothing", "Obj")); c.add(new CLS("Int", "Obj")); RESULT = new Program(c,s); :}
    					;
 					
    Statements		::= Statements:sts Statement:st {: sts.add(st); RESULT = sts; :}
@@ -79,11 +79,11 @@ precedence left DOT;
    Class   			::= Class_Signature:sig Class_Body 	{: RESULT = sig; :}
    					;
    
-   Class_Signature  ::= CLASS IDENT:i LPAREN Formals RPAREN OptExtends:oe 	{: RESULT = new CLS(new Ident(i), oe); :}
+   Class_Signature  ::= CLASS IDENT:i LPAREN Formals RPAREN OptExtends:oe 	{: RESULT = new CLS(i, oe.name); :}
    					;
 					
    OptExtends		::= EXTENDS IDENT:i 	{: RESULT = new Ident(i); :}
-   					|						{: Ident temp = new Ident("Obj"); RESULT = temp; System.out.println("Empty OptExtends " + temp.name); :}
+   					|						{: Ident temp = new Ident("Obj"); RESULT = temp; :}
 					;
 					
    Class_Body		::= LBRACKET Statements Methods RBRACKET
@@ -97,7 +97,7 @@ precedence left DOT;
 					|	Return_Statement
 					|	L_Expr COLON IDENT EQUALS R_Expr SEMICOLON
 					|	L_Expr EQUALS R_Expr SEMICOLON
-					|	R_Expr:r SEMICOLON											/* {: RESULT = new Stmt(r); :}		*/	
+					|	R_Expr:r SEMICOLON											   {: if(r != null){RESULT = new Stmt(r.constructor_name);} :}
 					;
 					
    Elif_Statements	::= Elif_Statements Elif_Statement
@@ -155,6 +155,7 @@ precedence left DOT;
 					|	MINUS INT:i										{: int temp = i * -1; RESULT = Expr.intconst(temp); :}
 					|	LPAREN R_Expr RPAREN
 					|	R_Expr EQUALS R_Expr
+					|	R_Expr EQUIV R_Expr
 					| 	R_Expr ATMOST R_Expr
 					| 	R_Expr ATLEAST R_Expr
 					| 	R_Expr LESS R_Expr
@@ -163,7 +164,7 @@ precedence left DOT;
 					| 	R_Expr OR R_Expr
 					| 	R_Expr NOT R_Expr
 					|	R_Expr DOT IDENT LPAREN Actual_Args RPAREN
-					|	IDENT:i LPAREN Actual_Args:a RPAREN					{: RESULT = Expr.construct(new Ident(i)); :}
+					|	IDENT:i LPAREN Actual_Args:a RPAREN					{: RESULT = new Expr(i, new LinkedList<Expr>()); :}
 					;
 					
 

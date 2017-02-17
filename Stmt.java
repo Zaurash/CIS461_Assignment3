@@ -2,10 +2,10 @@ import java.util.*;
 
 public class Stmt{
 	
-	public String construct_name;
+	public String constructor_name;
 	
 	public Stmt(String n){
-		this.construct_name = n;
+		this.constructor_name = n;
 	}
 	
 }

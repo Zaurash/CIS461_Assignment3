@@ -75,7 +75,7 @@ Trips = [\"][\"][\"]
 [.] {System.out.println(yyline+1 + " DOT " + "\"" + yytext() + "\""); return symbol(sym.DOT, yytext());}
 [:] {System.out.println(yyline+1 + " COLON " + "\"" + yytext() + "\""); return symbol(sym.COLON, yytext());}
 <YYINITIAL> "=" {System.out.println(yyline+1 + " EQUALS " + "\"" + yytext() + "\""); return symbol(sym.EQUALS, yytext());}
-<YYINITIAL> "==" {System.out.println(yyline+1 + " EQUALS " + "\"" + yytext() + "\""); return symbol(sym.EQUALS, yytext());}
+<YYINITIAL> "==" {System.out.println(yyline+1 + " EQUALS " + "\"" + yytext() + "\""); return symbol(sym.EQUIV, yytext());}
 <YYINITIAL> "<=" {System.out.println(yyline+1 + " ATMOST " + "\"" + yytext() + "\""); return symbol(sym.ATMOST, yytext());}
 <YYINITIAL> "<" {System.out.println(yyline+1 + " LESS " + "\"" + yytext() + "\""); return symbol(sym.LESS, yytext());}
 <YYINITIAL> ">=" {System.out.println(yyline+1 + " ATLEAST " + "\"" + yytext() + "\""); return symbol(sym.ATLEAST, yytext());}
