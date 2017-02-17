@@ -9,7 +9,7 @@ LIBS = $(CUPLIB)
 all:  test
 	
 test: scanner_driver.class test_input.txt
-	./parser test_input.txt
+	./quack test_input.txt
 	
 scanner_driver.class: scanner_driver.java Lexer.java parser.java
 

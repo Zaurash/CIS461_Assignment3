@@ -3,8 +3,8 @@
 #  Run the scanner as a java program
 #
 locality=`pwd`
-cat >parser <<EOF
+cat >quack <<EOF
 #1 /bin/bash
 java -cp .:.${locality}:./lib/java-cup-11b.jar scanner_driver \$1
 EOF
-chmod a+x parser
+chmod a+x quack
